@@ -1,0 +1,7 @@
+vk-api
+requests
+ruff
+vkbottle==4.3.13
+aiohttp==3.9.3
+redis==5.0.3
+python-dotenv==1.0.1
