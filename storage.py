@@ -1,13 +1,18 @@
 import os
 from redis.asyncio import Redis
 from typing import cast, Awaitable
+from loguru import logger
 
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 r = Redis(host=REDIS_HOST, port=6379, db=0, decode_responses=True)
 
 
 async def ping():
-    await cast(Awaitable[bool], r.ping())
+    try:
+        logger.success("Успешное подключение к Redis!")
+        await cast(Awaitable[bool], r.ping())
+    except Exception as e:
+        logger.critical(f"Нет связи с Redis: {e}")
 
 
 async def save_token(vk_id: int, token: str):
