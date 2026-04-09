@@ -64,6 +64,13 @@ async def hint_handler(message: Message, short_id: str, hint_index: str):
     result = await quest_api.take_hint(vk_id, short_id, int(hint_index))
     await message.answer(result)
 
+@bot.on.message(text="!задания")
+async def tasks_handler(message: Message):
+    vk_id = message.from_id
+    await message.answer("Запрашиваю список заданий...")
+    result = await quest_api.fetch_and_cache_tasks(vk_id)
+    await message.answer(result)
 
-print("бот работает юху")
-bot.run_forever()
+if __name__ == "__main__":
+    print("бот работает юху")
+    bot.run_forever()
