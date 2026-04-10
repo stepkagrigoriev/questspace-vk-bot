@@ -1,9 +1,19 @@
 from vkbottle.bot import Bot, Message
 from loguru import logger
 import sys
+import os
 import config
 import quest_api
 import storage
+
+raw_token = os.environ.get("VK_TOKEN")
+
+if not raw_token:
+    logger.critical("не видим vk token")
+    logger.info(f"{list(os.environ.keys())}")
+    sys.exit(1)
+else:
+    logger.success(f"токен найден: {raw_token}")
 
 
 logger.remove()
@@ -20,7 +30,7 @@ if not token:
     sys.exit(1)
 else:
     logger.info(f"Токен найден: {token}")
-    
+
 bot = Bot(token=token)
 
 
