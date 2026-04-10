@@ -85,7 +85,8 @@ async def help_handler(message: Message):
         "ДОСТУПНЫЕ КОМАНДЫ:\n\n"
         "АККАУНТ:\n"
         "!рега <логин> <пароль>\n"
-        "!логин <логин> <пароль>\n\n"
+        "!логин <логин> <пароль> — если вход не через Google\n"
+        "!токен <твой_токен> — если вход через Google (вставить из браузера)\n\n"
         "ИГРА:\n"
         "!квест <ID>\n"
         "!задания\n"
@@ -94,7 +95,14 @@ async def help_handler(message: Message):
     )
     await message.answer(text)
 
+@bot.on.message(text="!токен <token>")
+async def token_handler(message: Message, token: str):
+    vk_id = message.from_id
+    logger.info(f"[VK: {vk_id}] Установил токен вручную")
+    await storage.save_token(vk_id, token)
+    await message.answer("Токен успешно сохранен! Теперь ты можешь выбрать квест через !квест <ID>")
+
 
 if __name__ == "__main__":
-    logger.success("Бот успешно запущен и слушает ВК!")
+    logger.success("Бот запущен юху!")
     bot.run_forever()
