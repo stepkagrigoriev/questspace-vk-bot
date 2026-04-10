@@ -13,7 +13,15 @@ logger.add(
 )
 logger.add("logs/bot.log", rotation="5 MB", retention="10 days", level="INFO")
 
-bot = Bot(token=config.VK_TOKEN)
+token = config.VK_TOKEN
+
+if not token:
+    logger.critical("ЧЕ ЗА ХЕРНЯ ТОКЕНА НЕТУ! .env не прочитан")
+    sys.exit(1)
+else:
+    logger.info(f"Токен найден: {token}")
+    
+bot = Bot(token=token)
 
 
 @bot.on.message(text="!рега <username> <password>")
