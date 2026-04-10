@@ -12,9 +12,9 @@ services:
   bot:
     build: .
     environment:
+      - VK_TOKEN=${VK_TOKEN}
+      - API_URL=${API_URL}
       - REDIS_HOST=redis_db
-    env_file:
-      - .env 
     depends_on:
       - redis_db
     volumes:
