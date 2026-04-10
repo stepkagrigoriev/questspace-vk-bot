@@ -8,9 +8,12 @@ CLIENT_TIMEOUT = aiohttp.ClientTimeout(total=10)
 
 async def get_auth_headers(vk_id: int):
     token = await storage.get_token(vk_id)
+    if not token: return {}
+    token = token.strip().strip('"').strip("'")
+    logger.debug(f"[VK: {vk_id}] Использую токен из Redis. Длина: {len(token)}. Начинается на: {token[:10]}")
     if not token.startswith("Beaver "):
         return {"Authorization" : f"Beaver {token}"}
-    return {"Authorization": f"{token}"} if token else {}
+    return {"Authorization": f"{token}"}
 
 
 async def register_user(vk_id: int, username: str, password: str):
@@ -96,7 +99,7 @@ async def fetch_and_cache_tasks(vk_id: int):
             async with session.get(url, headers=headers) as response:
                 if response.status == 401:
                     logger.warning(f"[VK: {vk_id}] Токен устарел (ошибка 401)")
-                    return "Токен устарел. Напиши !логин <user> <pass>"
+                    return "Токен устарел или неверный. Получи новый на сайте и напиши: !токен <токен>"
 
                 if response.status != 200:
                     logger.error(
