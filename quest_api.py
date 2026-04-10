@@ -8,6 +8,8 @@ CLIENT_TIMEOUT = aiohttp.ClientTimeout(total=10)
 
 async def get_auth_headers(vk_id: int):
     token = await storage.get_token(vk_id)
+    if not token.startswith("Beaver "):
+        return {"Authorization" : f"Beaver {token}"}
     return {"Authorization": f"{token}"} if token else {}
 
 
